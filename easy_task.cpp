@@ -20,6 +20,7 @@ int main() {
     if (x > y) {
         swap(x, y);
     }
+    n=n-1;
     
     // Binary search for the minimum time
     long long low = 0;
@@ -38,7 +39,7 @@ int main() {
     }
     
     // Print the minimum time required
-    cout << result<< endl;
+    cout << result+min(x,y)<< endl;
     
     return 0;
 }
