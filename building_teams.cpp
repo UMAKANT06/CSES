@@ -1,18 +1,24 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// Function to perform DFS and color the graph
-bool dfs(int s, vector<bool>& visited, vector<vector<int>>& adj, vector<int>& color) {
-    visited[s] = true;
-    for (auto u : adj[s]) {
-        if (!visited[u]) {
-            // Assign alternate color to adjacent nodes
-            color[u] = 1 - color[s]; // If color[s] is 0, color[u] will be 1, and vice versa
-            if (!dfs(u, visited, adj, color)) {
-                return false; // If adjacent node coloring fails, return false
+bool isBipartite(int start, vector<vector<int>>& adj, vector<int>& color) {
+    queue<int> q;
+    q.push(start);
+    color[start] = 0; // Start coloring with 0
+
+    while (!q.empty()) {
+        int v = q.front();
+        q.pop();
+
+        for (int u : adj[v]) {
+            if (color[u] == -1) { // If not colored
+                // Assign alternate color
+                color[u] = 1 - color[v];
+                q.push(u);
+            } else if (color[u] == color[v]) {
+                // Same color as the current node means it's not bipartite
+                return false;
             }
-        } else if (color[u] == color[s]) {
-            return false; // If adjacent nodes have the same color, graph is not bipartite
         }
     }
     return true;
@@ -23,7 +29,6 @@ int main() {
     cin >> n >> m;
 
     vector<vector<int>> adj(n + 1); // adjacency list
-    vector<bool> visited(n + 1, false); // visited array
     vector<int> color(n + 1, -1); // color array, -1 means uncolored
 
     // Input edges
@@ -34,28 +39,81 @@ int main() {
         adj[b].push_back(a);
     }
 
-    // To ensure all components are covered
-    bool isBipartite = true;
+    // Check bipartiteness for each component
+    bool bipartite = true;
     for (int i = 1; i <= n; i++) {
-        if (!visited[i]) {
-            color[i] = 0; // Start coloring from 0
-            if (!dfs(i, visited, adj, color)) {
-                isBipartite = false;
+        if (color[i] == -1) { // Not visited yet
+            if (!isBipartite(i, adj, color)) {
+                bipartite = false;
                 break;
             }
         }
     }
 
-    // Output the result
-    if (isBipartite) {
-        for (int i = 1; i <= n; i++) {
-            // Output 1 or 2 based on the color
-            cout << (color[i] == 0 ? 1 : 2) << " ";
+    if (bipartite==false){cout<<"IMPOSSIBLE"<<endl;
+    return 0;
+    }
+
+    for(int i=1;i<=n;i++){
+        if(color[i]==0){
+            cout<<"1"<<" ";
+        }else{
+            cout<<"2"<<" ";
         }
-        cout << endl;
-    } else {
-        cout << "Graph is not bipartite" << endl;
     }
 
     return 0;
 }
+
+
+
+// queue<int> q;
+//     bool bipartite = true; // To check if the graph is bipartite
+//     vector<int> set1, set2; // Two sets to store nodes based on distance parity
+
+//     // Initialize BFS
+//     for (int i = 1; i <= n; i++) {
+//         if (distance[i] == -1) { // Not visited yet
+//             q.push(i);
+//             distance[i] = 0; // Start with distance 0
+
+//             while (!q.empty()) {
+//                 int v = q.front();
+//                 q.pop();
+
+//                 // Based on distance, add to the appropriate set
+//                 if (distance[v] % 2 == 0) {
+//                     set1.push_back(v);
+//                 } else {
+//                     set2.push_back(v);
+//                 }
+
+//                 for (int u : adj[v]) {
+//                     if (distance[u] == -1) { // If not visited
+//                         distance[u] = distance[v] + 1;
+//                         q.push(u);
+//                     } else if (distance[u] % 2 == distance[v] % 2) {
+//                         // If nodes at the same level are connected, it's not bipartite
+//                         bipartite = false;
+//                     }
+//                 }
+//             }
+//         }
+//     }
+
+//     if (bipartite) {
+//         cout << "The graph is bipartite." << endl;
+//         cout << "Set 1: ";
+//         for (int node : set1) {
+//             cout << node << " ";
+//         }
+//         cout << endl;
+
+//         cout << "Set 2: ";
+//         for (int node : set2) {
+//             cout << node << " ";
+//         }
+//         cout << endl;
+//     } else {
+//         cout << "The graph is not bipartite." << endl;
+//     }
