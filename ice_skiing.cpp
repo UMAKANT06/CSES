@@ -1,0 +1,30 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MAX_INT = 1000;
+
+int m, n;
+int arr[MAX_INT][MAX_INT];
+bool visited[MAX_INT][MAX_INT];
+int way[MAX_INT][MAX_INT];
+
+int main() {
+    cin >> m >> n;
+
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            cin >> arr[i][j];
+        }
+    }
+
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            cin >> way[i][j];
+        }
+    }
+
+    
+
+
+    return 0;
+}
