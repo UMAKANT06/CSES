@@ -10,7 +10,7 @@ void solve(int n,string s,int i,vector<string>&ans){
     s=s+'0';
     solve(n,s,i+1,ans);
     s.pop_back();
-    if(i==0 || s[i-1]!='1'){
+    if(i==0 ||( i!=0&&s[i-1]!='1')){
         s=s+'1';
         solve(n,s,i+1,ans);
         s.pop_back();
